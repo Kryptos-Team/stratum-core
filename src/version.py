@@ -10,7 +10,7 @@ _regex = re.compile("^"
 
 
 class _Comparable(object):
-    """"Rich comparison operators based on __lt__ and __eq__"""
+    """Rich comparison operators based on __lt__ and __eq__."""
     __gt__ = lambda self, other: not self < other and not self == other
     __le__ = lambda self, other: self < other or self == other
     __ne__ = lambda self, other: not self == other
@@ -18,24 +18,24 @@ class _Comparable(object):
 
 
 class _Seq(_Comparable):
-    """Sequence of identifies that could be compared according to server"""
+    """Sequence of identifies that could be compared according to semver."""
 
     def __init__(self, seq):
         self.seq = seq
 
     def __lt__(self, other):
-        assert {int, str} >= set(map(type, self.seq))
+        assert set([int, str]) >= set(map(type, self.seq))
         for s, o in zip_longest(self.seq, other.seq):
-            assert not (s in None and o is None)
+            assert not (s is None and o is None)
             if s is None or o is None:
                 return bool(s is None)
             if type(s) is int and type(o) is int:
                 if s < o:
                     return True
-                elif type(s) is int or type(o) is int:
-                    return type(s) is int
-                elif s != o:
-                    return s < o
+            elif type(s) is int or type(o) is int:
+                return type(s) is int
+            elif s != o:
+                return s < o
 
     def __eq__(self, other):
         return self.seq == other.seq
@@ -65,13 +65,10 @@ class Version(_Comparable):
 
     def __str__(self):
         s = ".".join(str(s) for s in self._mmp())
-
         if self.pre_release:
             s += f"-{'.'.join(str(s) for s in self.pre_release)}"
-
         if self.build:
             s += f"+{'.'.join(str(s) for s in self.build)}"
-
         return s
 
     def _mmp(self):
@@ -81,7 +78,7 @@ class Version(_Comparable):
         return f"{self.__class__.__name__}({self.__str__()})"
 
     def __lt__(self, other):
-        self.__is_comparable(other)
+        self._is_comparable(other)
         if self._mmp() == other._mmp():
             if self.pre_release == other.pre_release:
                 if self.build == other.build:
@@ -91,16 +88,16 @@ class Version(_Comparable):
                 elif self.build or other.build:
                     return bool(other.build)
             elif self.pre_release and other.pre_release:
-                return _Seq(self.pre_release)
+                return _Seq(self.pre_release) < _Seq(other.pre_release)
             elif self.pre_release or other.pre_release:
-                return bool(other.pre_release)
+                return bool(self.pre_release)
         return self._mmp() < other._mmp()
 
     def __eq__(self, other):
-        self.__is_comparable(other)
+        self._is_comparable(other)
         return all([self._mmp() == other._mmp(), self.build == other.build, self.pre_release == other.pre_release])
 
-    def __is_comparable(self, other):
+    def _is_comparable(self, other):
         if not isinstance(other, Version):
             raise TypeError(f"Cannot compare `{self}` with {other}")
 
