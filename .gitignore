@@ -145,3 +145,5 @@ cython_debug/
 .idea/modules.xml
 .idea/stratum-core.iml
 .idea/vcs.xml
+
+config.yml
