@@ -1,1 +1,4 @@
-envyaml==1.5.201226
+colorama~=0.4.4
+envyaml~=1.5.201226
+fluent-logger~=0.9.6
+setuptools~=51.1.0

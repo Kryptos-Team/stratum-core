@@ -2,7 +2,7 @@ from envyaml import EnvYAML
 import os
 
 # Setup BASE_DIR
-from exceptions import SettingsError
+from .exceptions import SettingsError
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -23,17 +23,10 @@ def setup():
     if os.path.exists(CONFIG_YAML):
         import sys
         module = sys.modules[__name__]
-        changes = {}
 
         for key, value in read_values(env["server"]):
             if value != module.__dict__.get(key, None):
-                changes[key] = value
-            module.__dict__[key] = value
-        if module.__dict__["debug"] and changes:
-            print("------------")
-            print("Settings:")
-            for key, value in changes.items():
-                print(key, ":", value)
+                module.__dict__[key] = value
     else:
         raise SettingsError("config.yml is missing")
 

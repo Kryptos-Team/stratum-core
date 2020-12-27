@@ -2,8 +2,19 @@ server:
     # Enable debug for verbose logging
     debug: true
 
-    # Possible values: DEBUG, WARNING, INFO, ERROR, CRITICAL
-    log_level: DEBUG
+    # Various log options
+    log:
+        # Possible values: DEBUG, WARNING, INFO, ERROR, CRITICAL
+        level: DEBUG
+        # Enable fluentd support
+        fluentd:
+            enabled: false
+            host: '127.0.0.1'
+            port: 24224
+        # Custom format is only used when fluentd is disabled
+        format: '{symbol} {color}[%(asctime)s %(filename)18s] %(levelname)-7s - %(message)7s{end}'
+        # Custom date format is only used when fluentd is disabled
+        date_format: '%Y-%m-%d %H:%M:%S'
 
     # Threads to use for synchronous methods
     thread_pool_size: 1
