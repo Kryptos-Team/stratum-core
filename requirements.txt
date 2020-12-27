@@ -1,1 +1,1 @@
-twisted
+envyaml==1.5.201226
