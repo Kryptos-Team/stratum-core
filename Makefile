@@ -1,6 +1,6 @@
 #
 # Authors:
-#  - Abhimanyu Saharan <asaharan@onemindservices.com>
+#  - Abhimanyu Saharan <desk.abhimanyu@gmail.com>
 #
 
 REGISTRY_HOST=docker.io
