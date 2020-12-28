@@ -1,4 +1,4 @@
-Developement Status :: 2 - Pre-Alpha
+Development Status :: 3 - Alpha
 Environment :: Console
 Environment :: No Input/Output (Daemon)
 Framework :: Pytest
