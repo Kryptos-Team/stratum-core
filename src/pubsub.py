@@ -1,12 +1,14 @@
+import os
+import logging
+
 import weakref
 import logzero
 from logzero import logger
 from connection_registry import ConnectionRegistry
 import hashlib
 from exceptions import PubsubException, AlreadySubscribed
-import settings
 
-logzero.loglevel(settings.log["level"])
+logzero.loglevel(logging.getLevelName(os.environ.get("log.level")))
 
 
 def subscribe(func):

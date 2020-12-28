@@ -1,14 +1,14 @@
+import os
+import logging
 from twisted.internet import defer, threads
 import weakref
 import re as regex
 import logzero
 from logzero import logger
-from .exceptions import ServiceNotFound, MethodNotFound, MissingServiceType, MissingServiceVendor, \
+from exceptions import ServiceNotFound, MethodNotFound, MissingServiceType, MissingServiceVendor, \
     MissingServiceIsDefault, DefaultServiceAlreadyExist
 
-import settings
-
-logzero.loglevel(level=settings.log["level"])
+logzero.loglevel(logging.getLevelName(os.environ.get("log.level")))
 
 VENDOR_RE = regex.compile(r"\[(.*)\\]")
 

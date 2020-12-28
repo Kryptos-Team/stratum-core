@@ -3,9 +3,10 @@ import logzero
 from logzero import logger
 from twisted.internet import reactor
 from services import GenericService
-import settings
+import os
+import logging
 
-logzero.loglevel(settings.log["level"])
+logzero.loglevel(logging.getLevelName(os.environ.get("log.level")))
 
 
 class ConnectionRegistry(object):

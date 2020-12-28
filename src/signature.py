@@ -4,7 +4,7 @@ from ecdsa import curves
 import base64
 import hashlib
 import json
-from .exceptions import SignatureVerificationFailed, UnknownSignatureAlgorithm, UnknownSignatureId
+from exceptions import SignatureVerificationFailed, UnknownSignatureAlgorithm, UnknownSignatureId
 
 _p = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2F
 _r = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141

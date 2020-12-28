@@ -1,3 +1,5 @@
+import os
+import logging
 import json
 import socket
 import logzero
@@ -10,10 +12,9 @@ from twisted.python.failure import Failure
 import stats
 import signature
 import connection_registry
-import settings
 from exceptions import MethodNotFound, ServiceException, ProtocolException, RemoteServiceException
 
-logzero.loglevel(settings.log["level"])
+logzero.loglevel(logging.getLevelName(os.environ.get("log.level")))
 
 
 class RequestCounter(object):
@@ -153,7 +154,7 @@ class Protocol(LineOnlyReceiver):
 
         if message_id is not None:
             # Other party does not care of error state for notifications
-            if settings.debug:
+            if os.environ.get("debug"):
                 tb = failure.getBriefTraceback()
             else:
                 tb = None
