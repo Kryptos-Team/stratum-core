@@ -2,3 +2,4 @@ colorama~=0.4.4
 envyaml~=1.5.201226
 logzero~=1.6.3
 setuptools~=51.1.0
+twisted~=20.3.0
