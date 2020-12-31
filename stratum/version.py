@@ -1,5 +1,5 @@
 import re
-from src.exceptions import VersionError
+from stratum.exceptions import VersionError
 from itertools import zip_longest
 
 _regex = re.compile("^"
@@ -102,4 +102,4 @@ class Version(_Comparable):
             raise TypeError(f"Cannot compare `{self}` with {other}")
 
 
-__version__ = str(Version("0.0.1"))
+__version__ = str(Version("0.0.2"))
