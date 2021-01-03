@@ -88,12 +88,7 @@ class AlreadySubscribed(ServiceException):
 
 class JsonRpcException(Exception):
     def __init__(self, rpc_error):
-        parent_args = []
-        try:
-            parent_args.append(rpc_error["message"])
-        except:
-            pass
-        Exception.__init__(self, *parent_args)
+        super(JsonRpcException, self).__init__(rpc_error)
         self.error = rpc_error
         self.code = rpc_error["code"] if "code" in rpc_error else None
         self.message = rpc_error["message"] if "message" in rpc_error else None
