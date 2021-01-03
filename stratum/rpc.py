@@ -1,7 +1,7 @@
 import base64
 import json
 import http.client as httplib
-from http.client import NotConnected, InvalidURL, UnknownProtocol, RemoteDisconnected
+from twisted.internet import defer
 import urllib.parse as urlparse
 from logzero import logger
 
@@ -52,6 +52,7 @@ class Rpc(object):
             item = f"{self.__service_name}.{item}"
         return Rpc(url=self.__url, service_name=item, timeout=self.__timeout, connection=self.__connection)
 
+    @defer.inlineCallbacks
     def __call__(self, *args, **kwargs):
         Rpc.__id_count += 1
 
@@ -79,19 +80,11 @@ class Rpc(object):
             elif "result" not in response:
                 raise JsonRpcException({"code": -343, "message": "Missing JSON-RPC result"})
 
-            return response["result"]
-        except NotConnected as e:
+            defer.returnValue((yield response["result"]))
+        except Exception as e:
             logger.error(e)
-        except InvalidURL as e:
-            logger.error(e)
-        except UnknownProtocol as e:
-            logger.error(e)
-        except RemoteDisconnected as e:
-            logger.error(e)
-        except ConnectionRefusedError as e:
-            logger.error(e)
-        except TypeError as e:
-            logger.error(e)
+            self.__connection.close()
+            return None
 
     def _get_response(self):
         http_response = self.__connection.getresponse()
@@ -100,7 +93,7 @@ class Rpc(object):
             raise JsonRpcException({"code": -342, "message": "Missing HTTP response from server"})
 
         content_type = http_response.getheader("Content-Type")
-        if content_type != "application/json":
+        if not content_type.startswith("application/json"):
             raise JsonRpcException({"code": -342, "message": f"{content_type} HTTP response with "
                                                              f"{http_response.status} {http_response.reason}"})
 
