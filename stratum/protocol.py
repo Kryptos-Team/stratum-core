@@ -1,5 +1,4 @@
 import os
-import logging
 import json
 import socket
 import logzero
@@ -12,9 +11,9 @@ from twisted.python.failure import Failure
 import stats
 import signature
 import connection_registry
-from exceptions import MethodNotFound, ServiceException, ProtocolException, RemoteServiceException
+from .exceptions import MethodNotFound, ServiceException, ProtocolException, RemoteServiceException
 
-logzero.loglevel(logging.getLevelName(os.environ.get("log.level")))
+logzero.loglevel("DEBUG")
 
 
 class RequestCounter(object):

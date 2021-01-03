@@ -4,11 +4,11 @@ import logging
 import weakref
 import logzero
 from logzero import logger
-from connection_registry import ConnectionRegistry
+from .connection_registry import ConnectionRegistry
 import hashlib
-from exceptions import PubsubException, AlreadySubscribed
+from .exceptions import PubsubException, AlreadySubscribed
 
-logzero.loglevel(logging.getLevelName(os.environ.get("log.level")))
+logzero.loglevel("DEBUG")
 
 
 def subscribe(func):

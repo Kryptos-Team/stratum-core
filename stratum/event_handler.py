@@ -1,13 +1,11 @@
 from twisted.internet import defer
 import logzero
 from logzero import logger
-import os
-import logging
 
-from services import wrap_result_object
-from exceptions import MethodNotFound
+from .services import wrap_result_object
+from .exceptions import MethodNotFound
 
-logzero.loglevel(logging.getLevelName(os.environ.get("log.level")))
+logzero.loglevel("DEBUG")
 
 
 class GenericEventHandler(object):

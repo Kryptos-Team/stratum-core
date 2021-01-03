@@ -2,11 +2,9 @@ import weakref
 import logzero
 from logzero import logger
 from twisted.internet import reactor
-from services import GenericService
-import os
-import logging
+from .services import GenericService
 
-logzero.loglevel(logging.getLevelName(os.environ.get("log.level")))
+logzero.loglevel("DEBUG")
 
 
 class ConnectionRegistry(object):
