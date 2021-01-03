@@ -84,3 +84,22 @@ class PubsubException(ServiceException):
 class AlreadySubscribed(ServiceException):
     def __init__(self, message):
         super(AlreadySubscribed, self).__init__(message)
+
+
+class JsonRpcException(Exception):
+    def __init__(self, rpc_error):
+        parent_args = []
+        try:
+            parent_args.append(rpc_error["message"])
+        except:
+            pass
+        Exception.__init__(self, *parent_args)
+        self.error = rpc_error
+        self.code = rpc_error["code"] if "code" in rpc_error else None
+        self.message = rpc_error["message"] if "message" in rpc_error else None
+
+    def __str__(self):
+        return f"{self.code}: {self.message}"
+
+    def __repr__(self):
+        return f"<{self.__class__.__name__} {self}>"
