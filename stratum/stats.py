@@ -1,9 +1,7 @@
 import logzero
 from logzero import logger
-import os
-import logging
 
-logzero.loglevel(logging.getLevelName(os.environ.get("log.level")))
+logzero.loglevel("DEBUG")
 
 
 class PeerStats(object):
