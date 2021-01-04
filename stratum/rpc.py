@@ -6,12 +6,16 @@ import urllib.parse as urlparse
 from logzero import logger
 
 from .exceptions import JsonRpcException
+from .utils import Conversion
 
 
 class Rpc(object):
     __id_count = 0
 
     def __init__(self, url, timeout=30, user_agent="Kryptos/0.0.1", service_name=None, connection=None):
+        # Initialize conversion class
+        self.convert = Conversion()
+
         if isinstance(url, str):
             self.__url = urlparse.urlparse(f"{url}")
         else:
@@ -24,7 +28,8 @@ class Rpc(object):
             port = self.__url.port
 
         self.__auth_header = "Basic {}".format(
-            self.__bytes_to_str(base64.b64encode(self.__str_to_bytes(f"{self.__url.username}:{self.__url.password}"))))
+            self.convert.bytes_str(
+                base64.b64encode(self.convert.str_bytes(f"{self.__url.username}:{self.__url.password}"))))
         self.__user_agent = user_agent
         self.__timeout = timeout
         self.__service_name = service_name
@@ -33,16 +38,6 @@ class Rpc(object):
             self.__connection = httplib.HTTPConnection(self.__url.hostname, port, timeout)
         else:
             self.__connection = connection
-
-    @staticmethod
-    def __str_to_bytes(string):
-        if isinstance(string, str):
-            return string.encode("utf-8")
-
-    @staticmethod
-    def __bytes_to_str(byts):
-        if isinstance(byts, bytes):
-            return byts.decode("utf-8")
 
     def __getattr__(self, item):
         if item.startswith("__") and item.endswith("__"):
@@ -97,7 +92,7 @@ class Rpc(object):
             raise JsonRpcException({"code": -342, "message": f"{content_type} HTTP response with "
                                                              f"{http_response.status} {http_response.reason}"})
 
-        response_data = self.__bytes_to_str(http_response.read())
+        response_data = self.convert.bytes_str(http_response.read())
         response = json.loads(response_data)
 
         if "error" in response and response["error"] is None:
